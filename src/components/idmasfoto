@@ -1,0 +1,71 @@
+<template>
+  <div>
+    <form @submit.prevent="submitForm">
+      <div class="form-group">
+        <label for="stringInput">Variable de tipo string:</label>
+        <input type="text" id="stringInput" v-model="stringValue" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="fileInput">Imagen:</label>
+        <input type="file" id="fileInput" ref="fileInput" class="form-control-file" required>
+      </div>
+      <b-button type="submit" variant="primary">Enviar</b-button>
+    </form>
+  </div>
+</template>
+  
+  <script>
+    import axios from 'axios'
+    export default {
+      data() {
+        return {
+          stringValue: '',
+          file: null
+        }
+      },
+      methods: {
+      llamarEndpointPost() {
+        const apiUrl = 'http://localhost:81/openfaceAPI';
+        const fileInput = this.$refs.fileInput;
+        const file = fileInput.files[0];
+
+        const formData = new FormData();
+        formData.append('file', file);
+        //formData.append('stringValue', this.stringValue);
+
+
+        axios.post(apiUrl, formData)
+          .then(response => {
+            console.log('Llamada POST exitosa', response);
+            console.log(response.data.data)
+            // Realiza las acciones adicionales después de una llamada exitosa
+          })
+          .catch(error => {
+            console.error('Error en la llamada POST', error);
+            // Maneja el error de alguna manera apropiada
+          });
+      },
+      submitForm() {
+        const apiUrl = 'http://localhost:81/openfaceAPI';
+      const fileInput = this.$refs.fileInput;
+      const file = fileInput.files[0];
+
+      const formData = new FormData();
+      formData.append('file', file);
+      //formData.append('stringValue', this.stringValue);
+
+      axios.post(apiUrl, formData)
+        .then(response => {
+          console.log('Llamada POST exitosa', response.data);
+          console.log(this.stringValue)
+          console.log(response.data)
+          // Realiza las acciones adicionales después de una llamada exitosa
+        })
+        .catch(error => {
+          console.error('Error en la llamada POST', error);
+          // Maneja el error de alguna manera apropiada
+        });
+    }
+    }
+    }
+  </script>
